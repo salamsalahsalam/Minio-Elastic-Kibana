@@ -1,0 +1,12 @@
+PUT /_snapshot/minio-s3-repo
+{
+  "type": "s3",
+  "settings": {
+    "bucket": "elasticsearch-snapshots",
+    "endpoint": "http://minio:9000",
+    "protocol": "http",
+    "path_style_access": "true",
+    "access_key": "6QOSXI4XbzhZ8pwbR5z5",
+    "secret_key": "IaDVXUd8o1CoVpf3HPB16mkGoOhe6uKnOEpg3d8c"
+  }
+}
