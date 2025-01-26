@@ -28,6 +28,11 @@ extraInitContainers:
     volumeMounts:
       - name: elasticsearch-plugins
         mountPath: /usr/share/elasticsearch/plugins
+
+extraVolumeMounts:
+  - name: plugins
+    mountPath: /usr/share/elasticsearch/plugins
+
 extraVolumes:
   - name: elasticsearch-plugins
     emptyDir: {}
