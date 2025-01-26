@@ -61,6 +61,7 @@ Retrieve the MinIO service information:
 ```bash
 kubectl get svc
 ```
+![image](https://github.com/user-attachments/assets/fed7ee27-7941-45b3-82c9-50ff26d1d4d6)
 
 ### Step 3: Create a MinIO Bucket and Access Keys
 
@@ -78,9 +79,15 @@ kubectl get svc
    mc mb myminio/elasticsearch-snapshots
    ```
 
-#### Using the MinIO Console
+#### Using the MinIO Console to create bucket and access keys
 
-Log into the MinIO console, navigate to "Buckets," and create a new bucket named `elasticsearch-snapshots`. You can also create access keys directly from the console if needed.
+Log into the MinIO console, navigate to "Buckets," and create a new bucket named `elasticsearch-snapshots`.
+![image](https://github.com/user-attachments/assets/aad091d1-c27b-44a4-b41d-57afe45f979d)
+
+
+You can also create access keys directly from the console if needed.
+![image](https://github.com/user-attachments/assets/a5fbd5cb-f2d3-4351-9925-e0bac49a11f6)
+
 
 ### Step 4: Configure Elasticsearch Snapshot Repository
 
@@ -100,6 +107,8 @@ PUT /_snapshot/minio-s3-repo
   }
 }
 ```
+![image](https://github.com/user-attachments/assets/87cf1c78-f326-4f25-85b8-7f50808c10a2)
+
 
 ### Step 5: Verify and Test Snapshots
 
@@ -163,6 +172,7 @@ GET /_snapshot/minio-s3-repo/snapshot-test
 Log into your MinIO instance and verify that the snapshot files are present in the `elasticsearch-snapshots` bucket.
 
 ---
+![image](https://github.com/user-attachments/assets/c67fee55-55a1-4cae-925a-b13d98239edd)
 
 ## Troubleshooting
 
