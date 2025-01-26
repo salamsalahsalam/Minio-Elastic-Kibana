@@ -2,6 +2,7 @@
 
 This repository contains steps and configurations to set up Elasticsearch with MinIO as a snapshot repository in a Kubernetes environment.
 
+
 ## Prerequisites
 
 Before proceeding, ensure you have the following:
@@ -37,6 +38,7 @@ Apply the updated Helm chart to your Elasticsearch deployment:
 ```bash
 helm upgrade --install elasticsearch elastic/elasticsearch -f values.yaml
 ```
+![image](https://github.com/user-attachments/assets/ce47aaf7-bea0-468c-afdc-ee47b7ce4901)
 
 ### Step 2: Install MinIO Using Helm
 
