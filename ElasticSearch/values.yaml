@@ -200,7 +200,12 @@ extraInitContainers:
       - sh
       - -c
       - |
-        bin/elasticsearch-plugin install --batch repository-s3
+        if ! /usr/share/elasticsearch/bin/elasticsearch-plugin list | grep -q repository-s3; then
+        echo "S3 plugin not found. Installing..."
+        /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch repository-s3
+        else
+        echo "S3 plugin is already installed. Skipping installation."
+        fi
     volumeMounts:
       - name: plugins
         mountPath: /usr/share/elasticsearch/plugins
