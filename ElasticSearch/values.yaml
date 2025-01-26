@@ -56,16 +56,7 @@ extraEnvs:
    value: "UG9wQEBybzc3ODVyZW1hdA"
  - name: ELASTIC_USERNAME
    value: "elastic"
- - name: AWS_ACCESS_KEY_ID
-   value: "AvtNNNjpJwrLyfmrEeT2"
- - name: AWS_SECRET_ACCESS_KEY
-   value: "PIiymqq6m4adCqr866GR0WssM55UFLpURbNkhi2R"
- - name: AWS_S3_ENDPOINT
-   value: "http://minio-service:9000"
- - name: S3_PROTOCOL
-   value: "http"
- - name: S3_BUCKET
-   value: "elasticsearch-snapshots"
+
 
  
 
