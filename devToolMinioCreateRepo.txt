@@ -10,3 +10,13 @@ PUT /_snapshot/minio-s3-repo
     "secret_key": "IaDVXUd8o1CoVpf3HPB16mkGoOhe6uKnOEpg3d8c"
   }
 }
+
+
+
+PUT /_snapshot/minio-s3-repo/snapshot-test
+{
+  "indices": "test-index",
+  "ignore_unavailable": true,
+  "include_global_state": false
+}
+
