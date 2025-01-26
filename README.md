@@ -20,11 +20,18 @@ Ensure that the `repository-s3` plugin is installed on all Elasticsearch nodes u
 
 ```yaml
 extraInitContainers:
-  - name: install-s3-plugin
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
-    command: ["sh", "-c"]
-    args:
-      - bin/elasticsearch-plugin install --batch repository-s3;
+   - name: install-s3-plugin
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3   # Replace <version> with your Elasticsearch version
+    command:
+      - sh
+      - -c
+      - |
+        if ! /usr/share/elasticsearch/bin/elasticsearch-plugin list | grep -q repository-s3; then
+        echo "S3 plugin not found. Installing..."
+        /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch repository-s3
+        else
+        echo "S3 plugin is already installed. Skipping installation."
+        fi
     volumeMounts:
       - name: elasticsearch-plugins
         mountPath: /usr/share/elasticsearch/plugins
