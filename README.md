@@ -2,7 +2,7 @@
 
 This repository contains steps and configurations to set up Elasticsearch with MinIO as a snapshot repository in a Kubernetes environment.
 
-
+Documentation: https://github.com/salamsalahsalam/Minio-Elastic-Kibana/blob/main/Elasticsearch_MinIO_Configuration.docx
 ## Prerequisites
 
 Before proceeding, ensure you have the following:
