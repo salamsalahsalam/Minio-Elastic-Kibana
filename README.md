@@ -81,7 +81,9 @@ PUT _ilm/policy/my-lifecycle-policy
 
 
 #### **🗑️ Delete Phase (After 25 min)**
-- The index is **deleted after 25 minutes** to free up disk space.  
+- The index is **deleted after 25 minutes** to free up disk space.
+  ![image](https://github.com/user-attachments/assets/bb6696f0-c064-4ba8-9be2-4cd82a8718fe)
+
 
 ---
 
