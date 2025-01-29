@@ -69,6 +69,8 @@ PUT _ilm/policy/my-lifecycle-policy
 #### **🔥 Hot Phase (0-10 min)**
 - **Data is actively written** with no changes applied to the index.  
 - The index remains in the hot phase for **10 minutes**.
+  ![image](https://github.com/user-attachments/assets/c43eb6e6-1495-469b-ae31-9d11ead81a30)
+
 
 #### **❄️ Warm Phase (10-25 min)**
 - After **10 minutes**, the index moves to the **warm phase**.  
