@@ -1,7 +1,103 @@
-# Configure Elasticsearch with MinIO for Snapshots
+# First: 
 
-This repository contains steps and configurations to set up Elasticsearch with MinIO as a snapshot repository in a Kubernetes environment.
+### **📄 README: Elasticsearch ILM Policy for Log Retention**  
+
+## **🔹 Overview**  
+This document explains the **Index Lifecycle Management (ILM) policy** used to manage log data in **Elasticsearch**. The policy ensures that:  
+✅ Logs stay in the **hot phase for 10 minutes** for active writes.  
+✅ Logs move to the **warm phase**, become **read-only**, and get optimized after 10 minutes.  
+✅ Logs are **deleted after 25 minutes** to free up storage.  
+
+---
+
+## **🔹 ILM Phases Explained**  
+| **Phase**  | **Duration** | **Actions Taken** |
+|------------|------------|-------------------|
+| **Hot**    | 0 → 10 min  | Data is actively written (no rollover) |
+| **Warm**   | 10 → 25 min | Merges shards into 1, sets index to read-only |
+| **Delete** | 25 min      | Deletes the index to free storage |
+
+---
+
+## **🔹 ILM Policy Configuration**  
+To apply this policy, use the following request in **Kibana Dev Tools** or **cURL**:
+
+```json
+PUT _ilm/policy/my-lifecycle-policy
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "min_age": "0m",
+        "actions": {}
+      },
+      "warm": {
+        "min_age": "10m",
+        "actions": {
+          "forcemerge": {
+            "max_num_segments": 1
+          },
+          "readonly": {}
+        }
+      },
+      "delete": {
+        "min_age": "25m",
+        "actions": {
+          "delete": {}
+        }
+      }
+    }
+  }
+}
+```
+
+---
+
+## **🔹 How This Works**  
+1. **Hot Phase (0-10 min)**  
+   - The index starts in the hot phase.  
+   - **No rollover is applied**, so the index remains active for writes.  
+
+2. **Warm Phase (10-25 min)**  
+   - The index moves to **warm storage** after 10 minutes.  
+   - **Forcemerge** optimizes performance by merging all shards into one.  
+   - The index becomes **read-only** to prevent further writes.  
+
+3. **Delete Phase (After 25 min)**  
+   - The index is automatically **deleted** after 25 minutes to free up disk space.  
+
+---
+
+## **🔹 Applying the Policy to an Index**  
+To apply this ILM policy to a new index:  
+
+```json
+PUT remat-logs-000001
+{
+  "settings": {
+    "index.lifecycle.name": "my-lifecycle-policy"
+  }
+}
+```
+
+✅ This ensures the **index follows the ILM policy** and transitions through the phases automatically.  
+
+---
+
+## **🔹 Summary**  
+- **No rollover** occurs in the hot phase.  
+- Data moves to warm after **10 minutes**, becomes read-only, and is optimized.  
+- Data is **deleted after 25 minutes**.  
+- ILM automates **storage management** to keep Elasticsearch efficient.  
+
+Would you like me to add **shard allocation settings** for different node types? 😊 
+
 ## For documentation about how to make index life cycle managmment and index template for managing daily logs : https://github.com/salamsalahsalam/Minio-Elastic-Kibana/blob/main/ELastic%26kibana.pptx
+
+
+# Second Configure Elasticsearch with MinIO for Snapshots
+This repository contains steps and configurations to set up Elasticsearch with MinIO as a snapshot repository in a Kubernetes environment.
+
 ## For snapshots and minio Documentation: https://github.com/salamsalahsalam/Minio-Elastic-Kibana/blob/main/Elasticsearch_MinIO_Configuration.docx
 
 ## Prerequisites
