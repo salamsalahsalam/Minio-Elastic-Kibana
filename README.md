@@ -77,6 +77,8 @@ PUT _ilm/policy/my-lifecycle-policy
 - **Shrinks the index** to a **single shard** to reduce resource usage.  
 - **Merges all segments** within the shard to improve search performance.  
 - **Sets the index to read-only** to prevent further writes.
+  ![image](https://github.com/user-attachments/assets/30327d73-745c-46be-bb00-2a8ba88d330f)
+
 
 #### **🗑️ Delete Phase (After 25 min)**
 - The index is **deleted after 25 minutes** to free up disk space.  
