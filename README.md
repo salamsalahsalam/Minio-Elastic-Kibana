@@ -1,19 +1,35 @@
 # First: 
-No, the **current ILM policy** only merges all segments **within each shard** into **one segment per shard** but does **not** merge all shards into a **single shard**.  
 
-To **merge all shards into one** and make the index **read-only**, you need to **shrink** the index before moving to the warm phase.  
+## **📄 README: Elasticsearch ILM Policy for Log Retention**
+
+### **🔹 Overview**
+This document outlines an **Index Lifecycle Management (ILM) policy** designed to manage the lifecycle of log data in **Elasticsearch**. The policy automates the process of:
+
+✅ **Hot phase (0-10 min):** Data is actively written without rollover.  
+✅ **Warm phase (10-25 min):**  
+   - Data is **shrunk** into a **single shard**.  
+   - All segments are merged into **one segment** per shard for improved read performance.  
+   - The index is set to **read-only** mode to prevent further writes.  
+✅ **Delete phase (25 min):** The index is **deleted** to free up storage space.  
+
+This approach optimizes resource usage, improves search performance, and automates index management without manual intervention.
 
 ---
 
-## **🔹 Updated ILM Policy (Merging to One Shard & Read-Only Mode)**  
-✅ **Hot Phase (0-10 min):** Data is actively written (no rollover).  
-✅ **Warm Phase (10-25 min):**  
-   - Shrinks all shards into **one shard**.  
-   - Merges all segments within that shard.  
-   - Makes the index **read-only**.  
-✅ **Delete Phase (After 25 min):** Index is **deleted**.  
+### **🔹 ILM Phases Explained**
 
-### **🔹 ILM Policy**
+| **Phase**  | **Duration** | **Actions Taken** |
+|------------|------------|-------------------|
+| **Hot**    | 0 → 10 min  | Data is actively written (no rollover). |
+| **Warm**   | 10 → 25 min | Shrinks the index into 1 shard, merges segments, and sets it to read-only. |
+| **Delete** | 25 min      | Deletes the index to free storage. |
+
+---
+
+### **🔹 ILM Policy Configuration**
+
+This **ILM policy** can be applied in **Kibana Dev Tools** or using **cURL**:
+
 ```json
 PUT _ilm/policy/my-lifecycle-policy
 {
@@ -48,50 +64,35 @@ PUT _ilm/policy/my-lifecycle-policy
 
 ---
 
-## **🔹 What Each Action Does**
-### **🔥 Hot Phase (0-10 min)**
-```json
-"hot": {
-  "min_age": "0m",
-  "actions": {}
-}
-```
-- Data is actively written.  
-- No changes are applied to the index.  
+### **🔹 What Each Phase Does**
+
+#### **🔥 Hot Phase (0-10 min)**
+- **Data is actively written** with no changes applied to the index.  
+- The index remains in the hot phase for **10 minutes**.
+
+#### **❄️ Warm Phase (10-25 min)**
+- After **10 minutes**, the index moves to the **warm phase**.  
+- **Shrinks the index** to a **single shard** to reduce resource usage.  
+- **Merges all segments** within the shard to improve search performance.  
+- **Sets the index to read-only** to prevent further writes.
+
+#### **🗑️ Delete Phase (After 25 min)**
+- The index is **deleted after 25 minutes** to free up disk space.  
 
 ---
 
-### **❄️ Warm Phase (10-25 min)**
+### **🔹 Applying the Policy to an Index**
+
+To apply the policy to a new index, run the following command:
+
 ```json
-"warm": {
-  "min_age": "10m",
-  "actions": {
-    "shrink": {
-      "number_of_shards": 1
-    },
-    "forcemerge": {
-      "max_num_segments": 1
-    },
-    "readonly": {}
+PUT remat-logs-000001
+{
+  "settings": {
+    "index.lifecycle.name": "my-lifecycle-policy"
   }
 }
 ```
-✅ **Shrinks the index** to **one shard** → reduces resource usage.  
-✅ **Merges all segments** within that single shard → improves search performance.  
-✅ **Sets the index to read-only** → prevents further writes.  
-
----
-
-### **🗑️ Delete Phase (After 25 min)**
-```json
-"delete": {
-  "min_age": "25m",
-  "actions": {
-    "delete": {}
-  }
-}
-```
-✅ **Deletes the index after 25 minutes** → saves disk space.  
 
 ---
 
@@ -102,7 +103,6 @@ PUT _ilm/policy/my-lifecycle-policy
 | **Warm** | 10 → 25 min | **Shrinks to 1 shard, merges segments, makes index read-only** |
 | **Delete** | 25 min | Index is **deleted** |
 
-Would you like to add **shard allocation rules** (e.g., move warm data to different nodes)? 😊
 
 ## For documentation about how to make index life cycle managmment and index template for managing daily logs : https://github.com/salamsalahsalam/Minio-Elastic-Kibana/blob/main/ELastic%26kibana.pptx
 
