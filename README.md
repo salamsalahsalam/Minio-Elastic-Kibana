@@ -40,7 +40,7 @@ PUT _ilm/policy/my-lifecycle-policy
         "actions": {}
       },
       "warm": {
-        "min_age": "10m",
+        "min_age": "60d",
         "actions": {
           "shrink": {
             "number_of_shards": 1
@@ -52,7 +52,7 @@ PUT _ilm/policy/my-lifecycle-policy
         }
       },
       "delete": {
-        "min_age": "25m",
+        "min_age": "90d",
         "actions": {
           "delete": {}
         }
